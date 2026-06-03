@@ -1,0 +1,12 @@
+[webservers]
+10.0.0.104
+10.0.0.75
+
+[devops]
+10.0.0.90
+
+[webservers:vars]
+packages=apache2 mysql-server
+
+[devops:vars]
+packages=git nginx cowsay

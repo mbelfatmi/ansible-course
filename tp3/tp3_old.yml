@@ -1,0 +1,40 @@
+---
+
+- name: "Installation sur les machines 1 et 2"
+  hosts: 10.0.0.104:10.0.0.75
+  become: true
+  vars:
+    packages:
+      - apache2
+      - mysql-server
+  tasks:
+    - name: "Mise à jour du cache APT"
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: "Installation des paquets requis"
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
+        install_recommends: false
+
+- name: "Installation sur la machine 3"
+  hosts: 10.0.0.90
+  become: true
+  vars:
+    packages:
+      - git
+      - nginx
+      - cowsay
+  tasks:
+    - name: "Mise à jour du cache APT"
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: "Installation des paquets requis"
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
+        install_recommends: false

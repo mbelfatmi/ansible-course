@@ -1,0 +1,30 @@
+---
+# --------------------------------------------------------------
+# PLAYBOOK : Installation de paquets sur plusieurs machines
+# --------------------------------------------------------------
+
+- name: "Installation des paquets requis"
+  hosts: all                     # Tous les hôtes du inventaire
+  become: true
+  gather_facts: false           # Pas besoin de facts supplémentaires
+
+  # -----------------------------------------------------------------
+  # Variables communes + surcharge par hôte / groupe
+  # -----------------------------------------------------------------
+  vars:
+    # Valeur par défaut (peut être écrasée dans l’inventaire ou via host_vars)
+    packages: []                # ← sera remplie par le groupe ou le host_vars
+
+  pre_tasks:
+    - name: "Mettre à jour le cache APT (une seule fois)"
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600   # évite de le refaire toutes les minutes
+      when: packages | length > 0   # ne s’exécute que s’il y a des paquets
+
+  tasks:
+    - name: "Installer les paquets requis"
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
+      when: packages | length > 0
