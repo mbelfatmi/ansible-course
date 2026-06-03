@@ -1,0 +1,10 @@
+[project]
+name = "ansible-course"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ansible>=14.0.0",
+    "ansible-core>=2.21.0",
+]
