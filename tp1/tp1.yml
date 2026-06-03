@@ -1,0 +1,10 @@
+---
+- name: Installer apache2 et configure la page d'accueil
+  hosts: all
+
+  tasks:
+    - name: Install apach2
+      ansible.builtin.apt:
+        update_cache: true
+        name: apache2
+        state: present
