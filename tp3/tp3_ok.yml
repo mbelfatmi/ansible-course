@@ -4,7 +4,7 @@
   remote_user: root
   become: true
   become_user: root
-  gather_facts: true          # s’assure que les facts sont disponibles
+  gather_facts: true          # <‑ s’assure que les facts sont disponibles
 
   tasks:
     - name: Install apache2 & mysql-server on node 1 & 2
@@ -31,8 +31,9 @@
       ansible.builtin.apt:
         name: ufw
         state: present
-        update_cache: true
+        update_cache: true     # optionnel mais pratique si le cache n’est pas à jour
       when: ansible_facts['distribution'] == "Ubuntu"
+      # équivalent : when: ansible_facts['distribution'] == 'Ubuntu'
 
     - name: Gather the package facts (rpm or deb)
       ansible.builtin.package_facts:
@@ -56,13 +57,3 @@
         name: nginx
         state: started
       when: "'nginx' in ansible_facts.packages"
-
-    # -------------------------------------------------
-    # Nouvelle tâche : créer /etc/jour selon le jour et l'heure
-    # -------------------------------------------------
-    - name: Write day description to /etc/jour
-      ansible.builtin.template:
-        src: jour.j2
-        dest: /etc/jour
-        mode: '0644'
-      # Les facts ansible_date_time sont déjà disponibles grâce à gather_facts

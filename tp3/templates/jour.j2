@@ -1,0 +1,21 @@
+{# -------------------------------------------------
+   jour.j2 – écrit dans /etc/jour la combinaison
+   jour du mois (pair/impair) + heure (avant/après midi).
+   Le cas exact 12:00 n’est volontairement pas traité.
+------------------------------------------------- #}
+{% set day  = ansible_facts['date_time']['day']  | int %}
+{% set hour = ansible_facts['date_time']['hour'] | int %}
+
+{% if day is even %}
+    {% if hour > 12 %}
+pair et plus tard que midi
+    {% elif hour < 12 %}
+pair et avant midi
+    {% endif %}
+{% else %} {# jour impair #}
+    {% if hour > 12 %}
+impair et plus tard que midi
+    {% elif hour < 12 %}
+impair et avant midi
+    {% endif %}
+{% endif %}
